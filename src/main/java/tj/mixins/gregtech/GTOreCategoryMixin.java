@@ -39,6 +39,6 @@ public abstract class GTOreCategoryMixin {
         for (int j = 0; j < size; j++)
             itemStackGroup.init(j + initialized, true,
                     22 + (j % NUM_OF_DIM_DISPLAY) * SLOT_WIDTH,
-                    128 + (j / NUM_OF_DIM_DISPLAY) * SLOT_HEIGHT);
+                    112 + (j / NUM_OF_DIM_DISPLAY) * SLOT_HEIGHT);
     }
 }
