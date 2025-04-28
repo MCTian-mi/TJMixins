@@ -13,8 +13,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import tj.util.DimDisplayRegistry;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Mixin(value = GTOreInfo.class, remap = false)
 public abstract class GTOreInfoMixin {
@@ -29,11 +29,9 @@ public abstract class GTOreInfoMixin {
     public void onConstruct(CallbackInfo ci) {
         int[] dims = JEIResourceDepositCategoryUtils.getAllRegisteredDimensions(definition.getDimensionFilter());
 
-        List<ItemStack> displays = Arrays.stream(dims)
+        Arrays.stream(dims)
                 .mapToObj(DimDisplayRegistry.INSTANCE::get)
                 .filter(stack -> !stack.isEmpty())
-                .collect(Collectors.toList());
-
-        groupedInputsAsItemStacks.add(displays);
+                .forEach(display -> groupedInputsAsItemStacks.add(Collections.singletonList(display)));
     }
 }
