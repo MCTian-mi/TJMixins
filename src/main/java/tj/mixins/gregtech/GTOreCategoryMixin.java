@@ -44,7 +44,7 @@ public abstract class GTOreCategoryMixin extends BasicRecipeCategory<GTOreInfo, 
 
     @ModifyConstant(method = "<init>", constant = @Constant(intValue = 166, ordinal = 0))
     private static int reducePanelHeight(int who_cares) {
-        return 108;
+        return 128;
     }
 
     @ModifyConstant(method = "setRecipe(Lmezz/jei/api/gui/IRecipeLayout;Lgregtech/integration/jei/basic/GTOreInfo;Lmezz/jei/api/ingredients/IIngredients;)V",
