@@ -3,27 +3,34 @@ package tj.util;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
 
-public enum DimDisplayRegistry {
-    INSTANCE;
+@SuppressWarnings("unused")
+@ParametersAreNonnullByDefault
+public class DimDisplayRegistry {
 
-    private final Map<Integer, ItemStack> internal = new Int2ObjectOpenHashMap<>();
-    private ItemStack defaultStack = ItemStack.EMPTY;
+    private static final Map<Integer, ItemStack> internal = new Int2ObjectOpenHashMap<>();
+    private static ItemStack defaultStack = ItemStack.EMPTY;
 
-    public void set(int dimId, ItemStack stack) {
+    public static void set(int dimId, ItemStack stack) {
         internal.put(dimId, stack);
     }
 
-    public ItemStack get(int dimId) {
+    public static ItemStack get(int dimId) {
         return internal.getOrDefault(dimId, defaultStack);
     }
 
-    public void setDefault(ItemStack stack) {
-        this.defaultStack = stack;
+    public static void setDefault(ItemStack stack) {
+        defaultStack = stack;
     }
 
-    public void clear() {
-        this.internal.clear();
+    public static void clear() {
+        internal.clear();
+    }
+
+    public static void set(Map<Integer, ItemStack> setter, boolean doClear) {
+        if (doClear) internal.clear();
+        internal.putAll(setter);
     }
 }
