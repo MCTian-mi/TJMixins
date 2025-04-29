@@ -34,7 +34,7 @@ public abstract class GTOreInfoMixin {
         int[] dims = JEIResourceDepositCategoryUtils.getAllRegisteredDimensions(definition.getDimensionFilter());
 
         Arrays.stream(dims)
-                .mapToObj(DimDisplayRegistry.INSTANCE::get)
+                .mapToObj(DimDisplayRegistry::get)
                 .filter(stack -> !stack.isEmpty())
                 .forEach(display -> groupedInputsAsItemStacks.add(Collections.singletonList(display)));
     }
