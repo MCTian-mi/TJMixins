@@ -1,6 +1,6 @@
 package tj.mixins.advancedrocketry;
 
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Final;
@@ -49,8 +49,8 @@ public abstract class AdvancedRocketryMixin {
             "ReassignedVariable",
             "StringConcatenationArgumentToLogCall"
     })
-    @Inject(method = "preInit", at = @At("TAIL"))
-    public void registerDimensions(FMLPreInitializationEvent event, CallbackInfo ci) {
+    @Inject(method = "postInit", at = @At("TAIL"))
+    public void registerDimensions(FMLPostInitializationEvent who_cares, CallbackInfo ci) {
         File file = new File("./config/advRocketry/asteroidConfig.xml");
         logger.info("Checking for asteroid config at " + file.getAbsolutePath());
         if (!file.exists()) {

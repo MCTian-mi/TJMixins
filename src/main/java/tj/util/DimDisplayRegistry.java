@@ -33,4 +33,8 @@ public class DimDisplayRegistry {
         if (doClear) internal.clear();
         internal.putAll(setter);
     }
+
+    public static void set(Map<Integer, ItemStack> setter) {
+        set(setter, true);
+    }
 }
