@@ -117,7 +117,7 @@ public abstract class GTOreCategoryMixin extends BasicRecipeCategory<GTOreInfo, 
                                           CallbackInfo ci, @Local IGuiItemStackGroup itemStackGroup) {
         int initialized = 2 + recipeWrapper.getOutputCount();
         int size = ingredients.getInputs(VanillaTypes.ITEM).size() - 2;
-        int height = 19 + (((initialized - 2) / NUM_OF_SLOTS) + 1) * SLOT_HEIGHT + 4 * FONT_HEIGHT + FONT_HEIGHT / 2;
+        int height = 19 + (((initialized - 2 - 1) / NUM_OF_SLOTS) + 1) * SLOT_HEIGHT + 4 * FONT_HEIGHT + FONT_HEIGHT / 2;
         for (int j = 0; j < size; j++)
             itemStackGroup.init(j + initialized, true,
                     22 + (j % NUM_OF_DIM_DISPLAY) * SLOT_WIDTH,
