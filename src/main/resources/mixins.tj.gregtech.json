@@ -1,6 +1,6 @@
 {
   "package": "tj.mixins.gregtech",
-  "refmap": "mixins.tj.refmap.json",
+  "refmap": "mixins.tjmixins.refmap.json",
   "target": "@env(DEFAULT)",
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
