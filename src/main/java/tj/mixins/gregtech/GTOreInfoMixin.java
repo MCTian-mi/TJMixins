@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import tj.util.DimDisplayRegistry;
 
 import java.util.Arrays;
@@ -25,6 +26,9 @@ public abstract class GTOreInfoMixin {
     @Shadow
     private @Final List<List<ItemStack>> groupedInputsAsItemStacks;
 
+    @Shadow
+    private @Final List<List<ItemStack>> groupedOutputsAsItemStacks;
+
     @Inject(method = "<init>", at = @At("TAIL"))
     public void onConstruct(CallbackInfo ci) {
         int[] dims = JEIResourceDepositCategoryUtils.getAllRegisteredDimensions(definition.getDimensionFilter());
@@ -33,5 +37,12 @@ public abstract class GTOreInfoMixin {
                 .mapToObj(DimDisplayRegistry.INSTANCE::get)
                 .filter(stack -> !stack.isEmpty())
                 .forEach(display -> groupedInputsAsItemStacks.add(Collections.singletonList(display)));
+    }
+
+    @Inject(method = "createOreWeightingTooltip", at = @At("HEAD"), cancellable = true)
+    public void skipDimDisplayItems(int slotIndex, CallbackInfoReturnable<List<String>> cir) {
+        if (slotIndex >= groupedOutputsAsItemStacks.size() + 2) {
+            cir.setReturnValue(Collections.emptyList());
+        }
     }
 }

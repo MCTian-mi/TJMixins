@@ -11,7 +11,8 @@ import java.util.stream.Collectors;
 public class LateMixinLoader implements ILateMixinLoader {
 
     public static final List<String> modMixins = ImmutableList.of(
-            "gregtech"
+            "gregtech",
+            "advancedrocketry"
     );
 
     public static boolean shouldEnableModMixin(String mod) {
