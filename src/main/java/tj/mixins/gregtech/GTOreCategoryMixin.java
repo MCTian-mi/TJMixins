@@ -13,6 +13,7 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
@@ -21,6 +22,9 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import tj.util.DimDisplayRegistry;
+
+import java.util.Collections;
 
 @Mixin(value = GTOreCategory.class, remap = false)
 public abstract class GTOreCategoryMixin extends BasicRecipeCategory<GTOreInfo, GTOreInfo> {
@@ -36,6 +40,9 @@ public abstract class GTOreCategoryMixin extends BasicRecipeCategory<GTOreInfo, 
 
     @Shadow
     private static @Final int SLOT_HEIGHT;
+
+    @Shadow
+    private int[] dimension;
 
     /// Are you happy how javac?
     GTOreCategoryMixin() {
@@ -112,15 +119,24 @@ public abstract class GTOreCategoryMixin extends BasicRecipeCategory<GTOreInfo, 
     }
 
     @Inject(method = "setRecipe(Lmezz/jei/api/gui/IRecipeLayout;Lgregtech/integration/jei/basic/GTOreInfo;Lmezz/jei/api/ingredients/IIngredients;)V",
-            at = @At(target = "Lmezz/jei/api/gui/IGuiItemStackGroup;addTooltipCallback(Lmezz/jei/api/gui/ITooltipCallback;)V", value = "INVOKE"))
+            at = @At("TAIL"))
     public void initializeDimDisplayItems(IRecipeLayout who_cares, GTOreInfo recipeWrapper, @NotNull IIngredients ingredients,
                                           CallbackInfo ci, @Local IGuiItemStackGroup itemStackGroup) {
         int initialized = 2 + recipeWrapper.getOutputCount();
-        int size = ingredients.getInputs(VanillaTypes.ITEM).size() - 2;
         int height = 19 + (((initialized - 2 - 1) / NUM_OF_SLOTS) + 1) * SLOT_HEIGHT + 4 * FONT_HEIGHT + FONT_HEIGHT / 2;
-        for (int j = 0; j < size; j++)
+        int j = 0;
+        var inputs = ingredients.getInputs(VanillaTypes.ITEM);
+        for (int dim : dimension) {
+            ItemStack stack = DimDisplayRegistry.INSTANCE.get(dim);
+            if (stack.isEmpty()) continue;
+
             itemStackGroup.init(j + initialized, true,
                     22 + (j % NUM_OF_DIM_DISPLAY) * SLOT_WIDTH,
                     height + (j / NUM_OF_DIM_DISPLAY) * SLOT_HEIGHT);
+            itemStackGroup.set(j + initialized, stack);
+            inputs.add(Collections.singletonList(stack));
+            j++;
+        }
+        ingredients.setInputLists(VanillaTypes.ITEM, inputs);
     }
 }
