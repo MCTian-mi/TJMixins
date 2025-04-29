@@ -105,6 +105,7 @@ public abstract class GTOreCategoryMixin extends BasicRecipeCategory<GTOreInfo, 
 
     @WrapWithCondition(method = "drawExtras",
             at = @At(target = "Lnet/minecraft/client/gui/FontRenderer;drawSplitString(Ljava/lang/String;IIII)V",
+                    remap = true,
                     value = "INVOKE"))
     private boolean skipSurfaceIdentifierString(FontRenderer i, String dont, int care, int about, int such, int shit) {
         return false;
