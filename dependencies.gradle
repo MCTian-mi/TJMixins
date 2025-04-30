@@ -38,10 +38,10 @@
  * For more details, see https://docs.gradle.org/8.4/userguide/java_library_plugin.html#sec:java_library_configurations_graph
  */
 dependencies {
-    api("gregtech:gregtech:2.8.10-beta") { transitive false}
-//    api files('libs/gregtech-1.12.2-2.9.0-beta.jar')
+//    api("gregtech:gregtech:2.8.10-beta") { transitive false}
+    api files('libs/gregtech-1.12.2-2.9.0-beta.jar')
     api ('codechicken:codechickenlib:3.2.3.358') { transitive false}
-//    api ('com.cleanroommc:modularui:2.5.0-rc4') { transitive false }
+    api ('com.cleanroommc:modularui:2.5.0-rc4') { transitive false }
     api ('com.cleanroommc:groovyscript:1.2.3') { transitive false }
     compileOnly rfg.deobf("curse.maven:arlib-1038780:5732205")
     compileOnly rfg.deobf("curse.maven:advanced-rocketry-2-1024225:6418955")
