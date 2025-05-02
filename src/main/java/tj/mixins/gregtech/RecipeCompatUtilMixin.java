@@ -13,12 +13,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import tj.util.TJHooks;
 
+import java.util.Objects;
+
 @Mixin(value = RecipeCompatUtil.class, remap = false)
 public class RecipeCompatUtilMixin {
 
     @ModifyReturnValue(method = "getMetaItemId", at = @At(value = "RETURN", ordinal = 0))
     private static String addNameSpace(String name, @Local MetaItem<?>.MetaValueItem metaValueItem) {
-        String namespace = metaValueItem.getMetaItem().getRegistryName().getNamespace();
+        String namespace = Objects.requireNonNull(metaValueItem.getMetaItem().getRegistryName()).getNamespace();
         if (namespace.equals(GTValues.MODID)) {
             return name;
         }
@@ -31,8 +33,7 @@ public class RecipeCompatUtilMixin {
             @At(value = "RETURN", ordinal = 4)
     })
     private static String addNameSpace(String name, @Share("material") LocalRef<Material> mat) {
-        Material material = mat.get();
-        return TJHooks.getRLPrefix(material) + material;
+        return TJHooks.getRLPrefix(mat.get()) + name;
     }
 
     @Redirect(method = "getMetaItemId",
