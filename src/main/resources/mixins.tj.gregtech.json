@@ -8,8 +8,11 @@
   },
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "CommonProxyMixin",
+    "GroovyHandCommandMixin",
     "GTCreativeTabsMixin",
     "GTOreCategoryMixin",
-    "GTOreInfoMixin"
+    "GTOreInfoMixin",
+    "RecipeCompatUtilMixin"
   ]
 }
