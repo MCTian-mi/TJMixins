@@ -2,6 +2,8 @@ package tj.mixins.gregtech;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import gregtech.api.GTValues;
 import gregtech.api.items.metaitem.MetaItem;
 import gregtech.api.unification.material.Material;
@@ -23,11 +25,21 @@ public class RecipeCompatUtilMixin {
         return namespace + ":" + name;
     }
 
+    @ModifyReturnValue(method = "getMetaItemId", at = {
+            @At(value = "RETURN", ordinal = 2),
+            @At(value = "RETURN", ordinal = 3),
+            @At(value = "RETURN", ordinal = 4)
+    })
+    private static String addNameSpace(String name, @Share("material") LocalRef<Material> mat) {
+        Material material = mat.get();
+        return TJHooks.getRLPrefix(material) + material;
+    }
+
     @Redirect(method = "getMetaItemId",
             at = @At(target = "Lgregtech/api/unification/material/Material;toCamelCaseString()Ljava/lang/String;",
                     value = "INVOKE"))
-    private static String addNameSpace(Material material) {
-
-        return TJHooks.getRLPrefix(material) + material;
+    private static String exposeLocals(Material material, @Share("material") LocalRef<Material> mat) {
+        mat.set(material);
+        return material.toCamelCaseString();
     }
 }
