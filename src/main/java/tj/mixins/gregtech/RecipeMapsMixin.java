@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import tj.recycling.RecyclingManager;
 
 @Mixin(value = RecipeMaps.class, remap = false)
-public class RecipeMapsMixin {
+public abstract class RecipeMapsMixin {
 
     @WrapOperation(method = "lambda$static$2",
             at = @At(target = "Lgregtech/api/recipes/builders/AssemblerRecipeBuilder;isWithRecycling()Z",

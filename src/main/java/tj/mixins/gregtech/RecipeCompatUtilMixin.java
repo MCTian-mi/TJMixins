@@ -16,7 +16,7 @@ import tj.util.TJHooks;
 import java.util.Objects;
 
 @Mixin(value = RecipeCompatUtil.class, remap = false)
-public class RecipeCompatUtilMixin {
+public abstract class RecipeCompatUtilMixin {
 
     @ModifyReturnValue(method = "getMetaItemId", at = @At(value = "RETURN", ordinal = 0))
     private static String addNameSpace(String name, @Local MetaItem<?>.MetaValueItem metaValueItem) {

@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import tj.util.TJHooks;
 
 @Mixin(value = GroovyHandCommand.class, remap = false)
-public class GroovyHandCommandMixin {
+public abstract class GroovyHandCommandMixin {
 
     @ModifyArg(method = "onHandCommand",
             at = @At(target = "Ljava/lang/StringBuilder;append(Ljava/lang/Object;)Ljava/lang/StringBuilder;",

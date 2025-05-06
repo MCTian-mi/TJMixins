@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(value = GTCreativeTabs.class, remap = false)
-public class GTCreativeTabsMixin {
+public abstract class GTCreativeTabsMixin {
 
     /// Super brute-force yea
     @Expression("true")
