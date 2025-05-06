@@ -1,10 +1,12 @@
-package tj.mixins;
+package tj.asm;
 
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.MCVersion;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.Name;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.SortingIndex;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 import zone.rong.mixinbooter.IEarlyMixinLoader;
 
@@ -17,6 +19,8 @@ import java.util.Map;
 @TransformerExclusions({"gregtech.asm.", "tj.asm."})
 @SortingIndex(2025)
 public class LoadingPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
+
+    public static final Logger LOGGER = LogManager.getLogger("TJAsms");
 
     @Override
     public String[] getASMTransformerClass() {
@@ -40,13 +44,14 @@ public class LoadingPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
 
     @Override
     public String getAccessTransformerClass() {
-        return null;
+        return "tj.asm.TJTransformer";
     }
 
     @Override
     public List<String> getMixinConfigs() {
         String[] configs = {
-                "mixins.tj.minecraft.json"
+//                "mixins.tj.minecraft.json",
+                "mixins.tj.forge.json"
         };
         return Arrays.asList(configs);
     }
