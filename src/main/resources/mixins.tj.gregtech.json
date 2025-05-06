@@ -13,6 +13,11 @@
     "GTCreativeTabsMixin",
     "GTOreCategoryMixin",
     "GTOreInfoMixin",
-    "RecipeCompatUtilMixin"
+    "ModHandlerMixin",
+    "OreDictUnifierAccessor",
+    "OreDictUnifierMixin",
+    "RecipeCompatUtilMixin",
+    "RecipeMapsMixin",
+    "RecyclingRecipesMixin"
   ]
 }
