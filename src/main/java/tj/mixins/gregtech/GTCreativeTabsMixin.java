@@ -12,7 +12,7 @@ public class GTCreativeTabsMixin {
     /// Super brute-force yea
     @Expression("true")
     @ModifyExpressionValue(method = "<clinit>", at = @At("MIXINEXTRAS:EXPRESSION"))
-    private static boolean wftWhoUsesSearchBarsWhenYouHaveJEI(boolean who_care) {
+    private static boolean wtfWhoUsesSearchBarsWhenYouHaveJEI(boolean who_care) {
         return false;
     }
 }
