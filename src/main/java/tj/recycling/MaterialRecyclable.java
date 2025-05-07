@@ -27,6 +27,7 @@ public record MaterialRecyclable(Material material) implements Recyclable {
 
     @Override
     public void addToMStack(Object2ObjectMap<Material, Fraction> mStacks, Fraction count) {
+        if (Fraction.ZERO.equals(count)) return;
         if (material instanceof MarkerMaterial) return; /// Do nothing if this is a marker material
         mStacks.put(material, mStacks.getOrDefault(material, Fraction.ZERO).add(count));
     }

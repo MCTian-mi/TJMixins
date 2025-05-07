@@ -8,11 +8,24 @@ import gregtech.api.GTValues;
 import gregtech.api.unification.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import tj.asm.LoadingPlugin;
 import tj.tooltip.RichTooltipEvent;
 
 import java.util.List;
 
 public class TJHooks {
+
+    public static final boolean IS_CRL = checkCRL();
+
+    public static boolean checkCRL() {
+        try {
+            Class.forName("com/cleanroommc/common/CleanroomContainer");
+            LoadingPlugin.LOGGER.info("Hello CrL!");
+            return true;
+        } catch (Exception ignored) {
+            return false;
+        }
+    }
 
     public static String getRLPrefix(Material material) {
         return material.getModid().equals(GTValues.MODID) ? "" : material.getModid() + ":";

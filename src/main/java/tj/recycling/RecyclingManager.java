@@ -27,6 +27,7 @@ import tj.mixins.gregtech.OreDictUnifierAccessor;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @SuppressWarnings({"UnstableApiUsage", "JavadocReference"})
@@ -166,7 +167,9 @@ public class RecyclingManager {
             Object2ObjectOpenHashMap<Material, Fraction> mStacks = new Object2ObjectOpenHashMap<>();
 
             graphStorage.predecessors(output).forEach(
-                    ing -> ing.addToMStack(mStacks, graphStorage.edgeValue(ing, output))
+                    /// Theoretically no default value is needed. However, it has to be here is for CrL compat
+                    /// since [MutableValueGraph#edgeValue] returns [Optional] in newer guava versions
+                    ing -> ing.addToMStack(mStacks, graphStorage.edgeValueOrDefault(ing, output, Fraction.ZERO))
             );
 
             if (mStacks.isEmpty()) return;
