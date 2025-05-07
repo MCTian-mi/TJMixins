@@ -23,7 +23,6 @@ public abstract class OreDictUnifierMixin {
         RecyclingManager.registerOre(itemStack, materialInfo);
     }
 
-
     @WrapOperation(method = "getMaterial(Lnet/minecraft/item/ItemStack;)Lgregtech/api/unification/stack/MaterialStack;",
             at = @At(target = "Lgregtech/api/unification/stack/MaterialStack;copy()Lgregtech/api/unification/stack/MaterialStack;",
                     value = "INVOKE"))
