@@ -13,7 +13,8 @@ public abstract class ModHandlerMixin {
 
     @Inject(method = "addShapedRecipe(ZLjava/lang/String;Lnet/minecraft/item/ItemStack;ZZ[Ljava/lang/Object;)V",
             at = @At(target = "Lnet/minecraft/item/ItemStack;getCount()I",
-                    value = "INVOKE"),
+                    value = "INVOKE",
+                    remap = true),
             cancellable = true)
     private static void replaceWithOurs(boolean i, String dont, ItemStack result, boolean care, boolean about, Object[] recipe, CallbackInfo ci) {
         RecyclingManager.addRecycling(result, result.getCount(), recipe);
