@@ -47,6 +47,19 @@ public record MaterialRecyclable(Material material) implements Recyclable {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        } else if (obj instanceof MaterialRecyclable other) {
+            /// Not comparing registries here since they'll have the same oreDict in the end anyway...
+            /// This is better for performance, and it's generally not a good practice
+            /// to have materials with the same name in two registries.
+            return material.getName().equals(other.material.getName());
+        }
+        return false;
+    }
+
+    @Override
     public String toString() {
         return String.format("M[%s]", material.getRegistryName());
     }
