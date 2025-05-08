@@ -51,7 +51,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
     public List<String> getMixinConfigs() {
         String[] configs = {
 //                "mixins.tj.minecraft.json",
-                "mixins.tj.forge.json"
+//                "mixins.tj.forge.json"
         };
         return Arrays.asList(configs);
     }
