@@ -1,14 +1,27 @@
 package tj.asm.transformers;
 
+import com.google.common.graph.Graph;
+import com.google.common.graph.ValueGraph;
+import net.neoforged.fml.loading.toposort.StronglyConnectedComponentDetector;
+import net.neoforged.fml.loading.toposort.TopologicalSort;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 import tj.asm.util.ExplicitTransformer;
+import tj.recycling.RecyclingManager;
 import zone.rong.mixinbooter.Context;
 
+import java.util.Comparator;
+
+/// [CleanroomLoader](cleanroommc.com) is using a newer version of [Guava](guava.dev) library,
+/// where the [ValueGraph] no longer inherits from [Graph].
+///
+/// This transforms every [Graph] reference into [ValueGraph] as a workaround.
+@SuppressWarnings("UnstableApiUsage")
 public class CrLCompatTransformer extends ExplicitTransformer {
 
     public static final String TOPOSORT_CLASS_NAME = "net/neoforged/fml/loading/toposort/TopologicalSort";
     public static final String SCCD_CLASS_NAME = "net/neoforged/fml/loading/toposort/StronglyConnectedComponentDetector";
+    public static final String RCYM_CLASS_NAME = "tj/recycling/RecyclingManager";
 
     public static final String TOPOSORT_METHOD_NAME = "topologicalSort";
     public static final String TOPOSORT_METHOD_DESC = "(Lcom/google/common/graph/Graph;Ljava/util/Comparator;)Ljava/util/List;";
@@ -17,8 +30,8 @@ public class CrLCompatTransformer extends ExplicitTransformer {
     public static final String TOPOSORT_METHOD_SIGN_TRANSFORMED = "<T:Ljava/lang/Object;>(Lcom/google/common/graph/ValueGraph<TT;*>;Ljava/util/Comparator<-TT;>;)Ljava/util/List<TT;>;";
 
     public static final String GRAPH_CLASS_NAME = "com/google/common/graph/Graph";
-    public static final String VALUEGRAPH_CLASS_NAME = "com/google/common/graph/ValueGraph";
     public static final String GRAPH_CLASS_DESC = "Lcom/google/common/graph/Graph;";
+    public static final String VALUEGRAPH_CLASS_NAME = "com/google/common/graph/ValueGraph";
     public static final String VALUEGRAPH_CLASS_DESC = "Lcom/google/common/graph/ValueGraph;";
 
     public static final String SCCD_INIT_NAME = "<init>";
@@ -44,6 +57,8 @@ public class CrLCompatTransformer extends ExplicitTransformer {
 
         if (classNode.methods != null) {
             for (MethodNode methodNode : classNode.methods) {
+
+                /// @see TopologicalSort#topologicalSort(Graph, Comparator)
                 if (methodNode.access == (ACC_PUBLIC | ACC_STATIC)) {
                     if (
                             methodNode.name.equals(TOPOSORT_METHOD_NAME) &&
@@ -54,6 +69,7 @@ public class CrLCompatTransformer extends ExplicitTransformer {
                         methodNode.signature = TOPOSORT_METHOD_SIGN_TRANSFORMED;
                     }
                 }
+
                 InsnList instructions = methodNode.instructions;
                 if (instructions != null) {
                     for (AbstractInsnNode insnNode : instructions.toArray()) {
@@ -62,6 +78,8 @@ public class CrLCompatTransformer extends ExplicitTransformer {
                                 if (methodInsnNode.owner.equals(GRAPH_CLASS_NAME)) {
                                     methodInsnNode.owner = VALUEGRAPH_CLASS_NAME;
                                 }
+
+                                /// @see StronglyConnectedComponentDetector(Graph)
                             } else if (methodInsnNode.getOpcode() == Opcodes.INVOKESPECIAL) {
                                 if (
                                         methodInsnNode.owner.equals(SCCD_CLASS_NAME) &&
@@ -86,6 +104,8 @@ public class CrLCompatTransformer extends ExplicitTransformer {
 
         if (classNode.fields != null) {
             for (FieldNode fieldNode : classNode.fields) {
+
+                /// @see StronglyConnectedComponentDetector#graph
                 if (fieldNode.access == (ACC_PRIVATE | ACC_FINAL)) {
                     if (
                             fieldNode.name.equals(SCCD_GRAPH_FIELD_NAME) &&
@@ -101,6 +121,8 @@ public class CrLCompatTransformer extends ExplicitTransformer {
 
         if (classNode.methods != null) {
             for (MethodNode methodNode : classNode.methods) {
+
+                /// @see StronglyConnectedComponentDetector(Graph)
                 if (methodNode.access == ACC_PUBLIC) {
                     if (
                             methodNode.name.equals(SCCD_INIT_NAME) &&
@@ -116,6 +138,8 @@ public class CrLCompatTransformer extends ExplicitTransformer {
                 if (instructions != null) {
                     for (AbstractInsnNode insnNode : instructions.toArray()) {
                         if (insnNode instanceof FieldInsnNode fieldInsnNode) {
+
+                            /// @see StronglyConnectedComponentDetector#graph
                             if (fieldInsnNode.getOpcode() == Opcodes.GETFIELD) {
                                 if (
                                         fieldInsnNode.owner.equals(SCCD_CLASS_NAME) &&
@@ -149,6 +173,8 @@ public class CrLCompatTransformer extends ExplicitTransformer {
 
         if (classNode.methods != null) {
             for (MethodNode methodNode : classNode.methods) {
+
+                /// @see RecyclingManager#init()
                 if (methodNode.access == (ACC_PUBLIC | ACC_STATIC)) {
                     if (
                             methodNode.name.equals(RCYM_INIT_NAME) &&
@@ -158,6 +184,8 @@ public class CrLCompatTransformer extends ExplicitTransformer {
                         if (instructions != null) {
                             for (AbstractInsnNode insnNode : instructions.toArray()) {
                                 if (insnNode instanceof MethodInsnNode methodInsnNode) {
+
+                                    /// @see TopologicalSort#topologicalSort(Graph, Comparator)
                                     if (methodInsnNode.getOpcode() == Opcodes.INVOKESTATIC) {
                                         if (
                                                 methodInsnNode.owner.equals(TOPOSORT_CLASS_NAME) &&

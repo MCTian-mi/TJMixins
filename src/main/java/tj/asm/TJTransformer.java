@@ -4,17 +4,20 @@ package tj.asm;
 import net.minecraft.launchwrapper.IClassTransformer;
 import tj.asm.transformers.CrLCompatTransformer;
 
+@SuppressWarnings("unused")
 public class TJTransformer implements IClassTransformer {
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
 
-        return switch (transformedName) {
-            case "net.neoforged.fml.loading.toposort.StronglyConnectedComponentDetector" ->
+        String internalName = transformedName.replace('.', '/');
+
+        return switch (internalName) {
+            case CrLCompatTransformer.SCCD_CLASS_NAME ->
                     CrLCompatTransformer.transformSCCD(transformedName, basicClass);
-            case "net.neoforged.fml.loading.toposort.TopologicalSort" ->
+            case CrLCompatTransformer.TOPOSORT_CLASS_NAME ->
                     CrLCompatTransformer.transformTopoSort(transformedName, basicClass);
-            case "tj.recycling.RecyclingManager" ->
+            case CrLCompatTransformer.RCYM_CLASS_NAME ->
                     CrLCompatTransformer.transformRecyclingManager(transformedName, basicClass);
 
             default -> basicClass;
