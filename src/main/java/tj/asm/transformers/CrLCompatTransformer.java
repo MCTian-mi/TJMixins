@@ -3,9 +3,9 @@ package tj.asm.transformers;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 import tj.asm.util.ExplicitTransformer;
-import tj.util.TJHooks;
+import zone.rong.mixinbooter.Context;
 
-public class GuavaGraphTransformer extends ExplicitTransformer {
+public class CrLCompatTransformer extends ExplicitTransformer {
 
     public static final String TOPOSORT_CLASS_NAME = "net/neoforged/fml/loading/toposort/TopologicalSort";
     public static final String SCCD_CLASS_NAME = "net/neoforged/fml/loading/toposort/StronglyConnectedComponentDetector";
@@ -36,8 +36,10 @@ public class GuavaGraphTransformer extends ExplicitTransformer {
     public static final String RCYM_INIT_NAME = "init";
     public static final String RCYM_INIT_DESC = "()V";
 
+    public static final boolean IS_CRL_ENV = new Context(null, null).modLoader() == Context.ModLoader.CLEANROOM;
+
     public static byte[] transformTopoSort(String transformedName, byte[] bytes) {
-        if (!TJHooks.IS_CRL) return bytes;
+        if (!IS_CRL_ENV) return bytes;
         ClassNode classNode = read(transformedName, bytes);
 
         if (classNode.methods != null) {
@@ -79,7 +81,7 @@ public class GuavaGraphTransformer extends ExplicitTransformer {
     }
 
     public static byte[] transformSCCD(String transformedName, byte[] bytes) {
-        if (!TJHooks.IS_CRL) return bytes;
+        if (!IS_CRL_ENV) return bytes;
         ClassNode classNode = read(transformedName, bytes);
 
         if (classNode.fields != null) {
@@ -142,7 +144,7 @@ public class GuavaGraphTransformer extends ExplicitTransformer {
     }
 
     public static byte[] transformRecyclingManager(String transformedName, byte[] bytes) {
-        if (!TJHooks.IS_CRL) return bytes;
+        if (!IS_CRL_ENV) return bytes;
         ClassNode classNode = read(transformedName, bytes);
 
         if (classNode.methods != null) {

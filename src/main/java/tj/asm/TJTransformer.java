@@ -2,7 +2,7 @@ package tj.asm;
 
 
 import net.minecraft.launchwrapper.IClassTransformer;
-import tj.asm.transformers.GuavaGraphTransformer;
+import tj.asm.transformers.CrLCompatTransformer;
 
 public class TJTransformer implements IClassTransformer {
 
@@ -11,11 +11,11 @@ public class TJTransformer implements IClassTransformer {
 
         return switch (transformedName) {
             case "net.neoforged.fml.loading.toposort.StronglyConnectedComponentDetector" ->
-                    GuavaGraphTransformer.transformSCCD(transformedName, basicClass);
+                    CrLCompatTransformer.transformSCCD(transformedName, basicClass);
             case "net.neoforged.fml.loading.toposort.TopologicalSort" ->
-                    GuavaGraphTransformer.transformTopoSort(transformedName, basicClass);
+                    CrLCompatTransformer.transformTopoSort(transformedName, basicClass);
             case "tj.recycling.RecyclingManager" ->
-                    GuavaGraphTransformer.transformRecyclingManager(transformedName, basicClass);
+                    CrLCompatTransformer.transformRecyclingManager(transformedName, basicClass);
 
             default -> basicClass;
         };
